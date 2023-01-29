@@ -1,4 +1,5 @@
-﻿using CoursatyApp.Data;
+﻿using AutoMapper;
+using CoursatyApp.Data;
 using CoursatyApp.DTOs;
 using CoursatyApp.Entities;
 using Microsoft.AspNetCore.Http;
@@ -15,17 +16,26 @@ namespace CoursatyApp.Controllers
     public class CoursesController : ControllerBase
     {
         private readonly CoursesDbContext coursesDbContext;
+        private readonly IMapper mapper;
 
-        public CoursesController(CoursesDbContext coursesDbContext)
+        public CoursesController(CoursesDbContext coursesDbContext , IMapper mapper)
         {
             this.coursesDbContext = coursesDbContext;
+            this.mapper = mapper;
         }
         [HttpGet]
         public ActionResult GetCourses([FromQuery] string category , [FromQuery]  string SearchQuery)
         {
-            if(string.IsNullOrEmpty(category) && string.IsNullOrEmpty(SearchQuery)) { 
+            if(string.IsNullOrEmpty(category) && string.IsNullOrEmpty(SearchQuery)) {
 
-                return Ok(coursesDbContext.Courses.ToList());
+                var coursesList2 = coursesDbContext.Courses.ToList();
+                var dtoCourses1 = mapper.Map<List<Course>, List<CourseDto>>(coursesList2);
+
+
+
+
+                return Ok(mapper.Map<List<Course>, List<CourseDto>>(coursesList2));
+               
             }
             var courses = coursesDbContext.Courses as IQueryable<Course>;
             if (!string.IsNullOrEmpty(category) )
@@ -42,25 +52,12 @@ namespace CoursatyApp.Controllers
 
             var coursesList =courses.ToList();
 
-            var dtoCourses = new List<CourseDto>();
+            var dtoCourses = mapper.Map<List<Course> , List<CourseDto>>(coursesList);
 
-            foreach( var item in coursesList)
-            {
-
-                dtoCourses.Add(new CourseDto
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Description = item.Description,
-                    Creation = item.Creation_Date.ToShortDateString(),
-                    Category = item.CategoryId,
-                    Image = item.Image_Id
-                });
-                
-            }
+         
 
 
-            return Ok(dtoCourses);
+            return Ok(mapper.Map<List<Course>, List<CourseDto>>(coursesList));
         }  
         [HttpGet("{courseId}")]
 
