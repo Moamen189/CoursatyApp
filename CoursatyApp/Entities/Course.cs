@@ -14,10 +14,13 @@ namespace CoursatyApp.Entities
 
         public DateTime  Creation_Date { get; set; }
 
+        public string Image_Id { get; set; }
+
         [ForeignKey("Category")]
         public int? CategoryId { get; set; }
 
         public Category Category { get; set; }
+
 
 
 

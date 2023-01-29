@@ -1,9 +1,11 @@
 ﻿using CoursatyApp.Data;
+using CoursatyApp.DTOs;
 using CoursatyApp.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CoursatyApp.Controllers
@@ -36,6 +38,20 @@ namespace CoursatyApp.Controllers
             {
 
                 courses = courses.Where(c => c.Name.Contains(SearchQuery) || c.Description.Contains(SearchQuery));
+            }
+
+            var coursesList =courses.ToList();
+
+            var dtoCourses = new List<CourseDto>();
+
+            foreach( var item in coursesList)
+            {
+
+                dtoCourses.Add(new CourseDto
+                {
+                    Id = item.Id
+                });
+                
             }
 
 
