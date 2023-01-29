@@ -40,7 +40,7 @@ namespace CoursatyApp.Controllers
 
 
             return Ok(courses.ToList());
-        }
+        }  
         [HttpGet("{courseId}")]
 
         public ActionResult GetCourse(int courseId)
