@@ -21,9 +21,25 @@ namespace CoursatyApp.Controllers
         [HttpGet]
         public ActionResult GetCourses(string category , string SearchQuery)
         {
-            var courses = coursesDbContext.Courses.ToList();
+            if(string.IsNullOrEmpty(category) && string.IsNullOrEmpty(SearchQuery)) { 
 
-            return Ok(courses);
+                return Ok(coursesDbContext.Courses.ToList());
+            }
+            var courses = coursesDbContext.Courses as IQueryable<Course>;
+            if (!string.IsNullOrEmpty(category) )
+            {
+
+                courses = courses.Where(c => c.CategoryId == int.Parse(category));
+            }
+
+            if (!string.IsNullOrEmpty(SearchQuery))
+            {
+
+                courses = courses.Where(c => c.Name.Contains(SearchQuery) || c.Description.Contains(SearchQuery));
+            }
+
+
+            return Ok(courses.ToList());
         }
         [HttpGet("{courseId}")]
 
