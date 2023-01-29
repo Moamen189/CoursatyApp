@@ -57,6 +57,7 @@ namespace CoursatyApp.Controllers
             {
                 return BadRequest("Course Doesn't Exist !");
             }
+            
             coursesDbContext.Courses.Remove(course);
             coursesDbContext.SaveChanges();
 
@@ -76,6 +77,9 @@ namespace CoursatyApp.Controllers
             {
                 return BadRequest("Course Doesn't Exist !");
             }
+
+            course.Description = CourseInfo.Description;
+            course.Name = CourseInfo.Name;  
                 coursesDbContext.Entry(course).State = EntityState.Modified;
             coursesDbContext.SaveChanges();
 
