@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoursatyApp.Data;
+using CoursatyApp.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Linq;
 
 namespace CoursatyApp.Controllers
 {
@@ -9,36 +12,80 @@ namespace CoursatyApp.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        // GET: api/<CategoriesController>
+        private readonly CoursesDbContext coursesDbContext;
+
+        public CategoriesController(CoursesDbContext coursesDbContext)
+        {
+            this.coursesDbContext = coursesDbContext;
+        }
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult GetCourses()
         {
-            return new string[] { "value1", "value2" };
+            var Categories = coursesDbContext.Categories.ToList();
+
+            return Ok(Categories);
+        }
+        [HttpGet("{categoryId}")]
+
+        public ActionResult GetCourse(int categoryId)
+        {
+            var category = coursesDbContext.Categories.Find(categoryId);
+
+            return Ok(category);
         }
 
-        // GET api/<CategoriesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
-        // POST api/<CategoriesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult CreateCourse(Category CategoryInfo)
         {
+            
+            coursesDbContext.Categories.Add(CategoryInfo);
+            coursesDbContext.SaveChanges();
+
+
+            return Ok(CategoryInfo);
         }
 
-        // PUT api/<CategoriesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+
+        [HttpDelete("{categoryId}")]
+
+        public ActionResult DeleteCourse(int categoryId)
         {
+            var Category = coursesDbContext.Categories.Find(categoryId);
+
+            if (Category == null)
+            {
+                return BadRequest("Category Doesn't Exist !");
+            }
+
+            coursesDbContext.Categories.Remove(Category);
+            coursesDbContext.SaveChanges();
+
+
+            return Ok(Category);
         }
 
-        // DELETE api/<CategoriesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+
+        [HttpPut("{categoryId}")]
+
+        public ActionResult UpdateCourse(Category CategoryInfo)
         {
+            var category = coursesDbContext.Categories.Find(CategoryInfo.Id);
+
+            if (category == null)
+            {
+                return BadRequest("category Doesn't Exist !");
+            }
+
+
+            category.Name = CategoryInfo.Name;
+
+            coursesDbContext.Entry(category).State = EntityState.Modified;
+            coursesDbContext.SaveChanges();
+
+
+            return Ok(category);
         }
     }
 }
