@@ -49,13 +49,18 @@ namespace CoursatyApp.Controllers
 
                 dtoCourses.Add(new CourseDto
                 {
-                    Id = item.Id
+                    Id = item.Id,
+                    Name = item.Name,
+                    Description = item.Description,
+                    Creation = item.Creation_Date.ToShortDateString(),
+                    Category = item.CategoryId,
+                    Image = item.Image_Id
                 });
                 
             }
 
 
-            return Ok(courses.ToList());
+            return Ok(dtoCourses);
         }  
         [HttpGet("{courseId}")]
 
