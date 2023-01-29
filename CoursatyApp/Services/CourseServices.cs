@@ -38,7 +38,7 @@ namespace CoursatyApp.Services
 
             if (IsCourseExists(course.Name))
                 return null;
-
+            course.Creation_Date = DateTime.UtcNow;    
             return courseRepository.Add(course);
         }
 

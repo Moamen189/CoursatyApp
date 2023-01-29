@@ -2,6 +2,7 @@
 using CoursatyApp.Data;
 using CoursatyApp.DTOs;
 using CoursatyApp.Entities;
+using CoursatyApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +16,14 @@ namespace CoursatyApp.Controllers
     [ApiController]
     public class CoursesController : ControllerBase
     {
-        private readonly CoursesDbContext coursesDbContext;
+       
+        private readonly ICourseService courseService;
         private readonly IMapper mapper;
 
-        public CoursesController(CoursesDbContext coursesDbContext , IMapper mapper)
+        public CoursesController(ICourseService courseService , IMapper mapper)
         {
-            this.coursesDbContext = coursesDbContext;
+            
+            this.courseService = courseService;
             this.mapper = mapper;
         }
         [HttpGet]
@@ -28,7 +31,7 @@ namespace CoursatyApp.Controllers
         {
             if(string.IsNullOrEmpty(category) && string.IsNullOrEmpty(SearchQuery)) {
 
-                var coursesList2 = coursesDbContext.Courses.ToList();
+                var coursesList2 = courseService.GetCourses().ToList();
                 var dtoCourses1 = mapper.Map<List<Course>, List<CourseDto>>(coursesList2);
 
 
@@ -37,7 +40,7 @@ namespace CoursatyApp.Controllers
                 return Ok(mapper.Map<List<Course>, List<CourseDto>>(coursesList2));
                
             }
-            var courses = coursesDbContext.Courses as IQueryable<Course>;
+            var courses = courseService.GetCourses(); 
             if (!string.IsNullOrEmpty(category) )
             {
 
@@ -63,21 +66,22 @@ namespace CoursatyApp.Controllers
 
         public ActionResult GetCourse(int courseId)
         {
-            var course = coursesDbContext.Courses.Find(courseId);
+            var course = courseService.GetCourse(courseId);
 
-            return Ok(course);
+            if (course == null)
+                return BadRequest("Course not found !");
+
+            return Ok(mapper.Map<Course , CourseDto>(course));
         }
 
 
         [HttpPost]
         public ActionResult CreateCourse(Course CourseInfo)
         {
-            CourseInfo.Creation_Date = DateTime.UtcNow;
-            coursesDbContext.Courses.Add(CourseInfo);
-            coursesDbContext.SaveChanges();
-         
+          
+            courseService.CreateCourse(CourseInfo);
 
-            return Ok(CourseInfo);
+            return Ok(mapper.Map<Course, CourseDto>(CourseInfo));
         }
 
 
@@ -85,18 +89,16 @@ namespace CoursatyApp.Controllers
 
         public ActionResult DeleteCourse(int courseId)
         {
-            var course = coursesDbContext.Courses.Find(courseId);
+            var course = courseService.GetCourse(courseId);
 
-            if(course == null)
-            {
-                return BadRequest("Course Doesn't Exist !");
-            }
+            if (course == null)
+                return BadRequest("Course not found !");
+
+            courseService.DeleteCourse(courseId);
             
-            coursesDbContext.Courses.Remove(course);
-            coursesDbContext.SaveChanges();
 
 
-            return Ok(course);
+            return Ok(mapper.Map<Course, CourseDto>(course));
         }
 
 
@@ -105,20 +107,17 @@ namespace CoursatyApp.Controllers
 
         public ActionResult UpdateCourse(Course CourseInfo)
         {
-            var course = coursesDbContext.Courses.Find(CourseInfo.Id);
+            var course = courseService.GetCourse(CourseInfo.Id);
 
             if (course == null)
-            {
-                return BadRequest("Course Doesn't Exist !");
-            }
+                return BadRequest("Course not found !");
 
-            course.Description = CourseInfo.Description;
-            course.Name = CourseInfo.Name;  
-                coursesDbContext.Entry(course).State = EntityState.Modified;
-            coursesDbContext.SaveChanges();
+            courseService.UpdateCourse(CourseInfo , CourseInfo.Id);
 
 
-            return Ok(course);
+
+
+            return Ok(mapper.Map<Course, CourseDto>(course));
         }
 
 

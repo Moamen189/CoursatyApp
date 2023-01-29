@@ -11,7 +11,7 @@ namespace CoursatyApp.Data.Repositories
         TEnitiy Update(TEnitiy entity);
 
         TEnitiy Get(int id);
-        IEnumerable<TEnitiy> Get(Expression<Func<TEnitiy, bool>> Predicate);
+       IEnumerable<TEnitiy> Get(Expression<Func<TEnitiy, bool>> Predicate);
 
 
         TEnitiy Delete(int id);
