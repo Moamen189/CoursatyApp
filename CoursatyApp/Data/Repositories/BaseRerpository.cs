@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace CoursatyApp.Data.Repositories
 {
@@ -25,22 +28,37 @@ namespace CoursatyApp.Data.Repositories
 
         public TEnitiy Delete(int id)
         {
-            throw new System.NotImplementedException();
+           var course =  dbContext.Set<TEnitiy>().Find(id);
+            dbContext.Set<TEnitiy>().Remove(course);
+
+            dbContext.SaveChanges();
+
+            return course;
+            
         }
 
         public TEnitiy Get(int id)
         {
-            throw new System.NotImplementedException();
+            return dbContext.Set<TEnitiy>().Find(id);
+        }
+
+        public IEnumerable<TEnitiy> Get(Expression<Func<TEnitiy, bool>> Predicate)
+        {
+            return dbContext.Set<TEnitiy>().Where(Predicate).ToList();
         }
 
         public IEnumerable<TEnitiy> GetAll()
         {
-            throw new System.NotImplementedException();
+            return dbContext.Set<TEnitiy>().ToList();
         }
 
-        public TEnitiy Update(TEnitiy enitiy)
+        public TEnitiy Update(TEnitiy entity)
         {
-            throw new System.NotImplementedException();
+            dbContext.Entry<TEnitiy>(entity).State = EntityState.Modified;
+            dbContext.SaveChanges();
+            return entity;
         }
+
+       
     }
 }
