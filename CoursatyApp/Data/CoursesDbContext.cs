@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CoursatyApp.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoursatyApp.Data
 {
@@ -8,5 +9,9 @@ namespace CoursatyApp.Data
         {
 
         }
+
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
     }
 }
