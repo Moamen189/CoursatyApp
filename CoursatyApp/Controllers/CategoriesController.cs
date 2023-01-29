@@ -19,9 +19,9 @@ namespace CoursatyApp.Controllers
             this.coursesDbContext = coursesDbContext;
         }
         [HttpGet]
-        public ActionResult GetCategories()
+        public ActionResult GetCategories(int categoryId)
         {
-            var Categories = coursesDbContext.Categories.ToList();
+            var Categories = coursesDbContext.Courses.Where(c => c.CategoryId == categoryId).ToList();
 
             return Ok(Categories);
         }

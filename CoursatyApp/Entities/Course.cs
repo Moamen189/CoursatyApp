@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoursatyApp.Entities
 {
@@ -12,6 +13,9 @@ namespace CoursatyApp.Entities
         public string Description { get; set; }
 
         public DateTime  Creation_Date { get; set; }
+
+        [ForeignKey("Category")]
+        public int? CategoryId { get; set; }
 
         public Category Category { get; set; }
 
