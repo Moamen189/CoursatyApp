@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CoursatyApp.Entities
 {
@@ -8,5 +9,8 @@ namespace CoursatyApp.Entities
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+
+        public virtual ICollection<Course> courses { get; set; } = new HashSet<Course>();
     }
 }

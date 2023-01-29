@@ -13,6 +13,8 @@ namespace CoursatyApp.Entities
 
         public DateTime  Creation_Date { get; set; }
 
+        public Category Category { get; set; }
+
 
 
     }

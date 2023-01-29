@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace CoursatyApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/{categoryId}/cources")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
