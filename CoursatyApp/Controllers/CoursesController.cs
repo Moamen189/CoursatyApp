@@ -19,7 +19,7 @@ namespace CoursatyApp.Controllers
             this.coursesDbContext = coursesDbContext;
         }
         [HttpGet]
-        public ActionResult GetCourses()
+        public ActionResult GetCourses(string category , string SearchQuery)
         {
             var courses = coursesDbContext.Courses.ToList();
 
