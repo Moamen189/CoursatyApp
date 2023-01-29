@@ -19,7 +19,7 @@ namespace CoursatyApp.Controllers
             this.coursesDbContext = coursesDbContext;
         }
         [HttpGet]
-        public ActionResult GetCourses()
+        public ActionResult GetCategories()
         {
             var Categories = coursesDbContext.Categories.ToList();
 
@@ -27,7 +27,7 @@ namespace CoursatyApp.Controllers
         }
         [HttpGet("{categoryId}")]
 
-        public ActionResult GetCourse(int categoryId)
+        public ActionResult GetCategory(int categoryId)
         {
             var category = coursesDbContext.Categories.Find(categoryId);
 
@@ -36,7 +36,7 @@ namespace CoursatyApp.Controllers
 
 
         [HttpPost]
-        public ActionResult CreateCourse(Category CategoryInfo)
+        public ActionResult CreateCategory(Category CategoryInfo)
         {
             
             coursesDbContext.Categories.Add(CategoryInfo);
@@ -49,7 +49,7 @@ namespace CoursatyApp.Controllers
 
         [HttpDelete("{categoryId}")]
 
-        public ActionResult DeleteCourse(int categoryId)
+        public ActionResult DeleteCategory(int categoryId)
         {
             var Category = coursesDbContext.Categories.Find(categoryId);
 
@@ -69,7 +69,7 @@ namespace CoursatyApp.Controllers
 
         [HttpPut("{categoryId}")]
 
-        public ActionResult UpdateCourse(Category CategoryInfo)
+        public ActionResult UpdateCategory(Category CategoryInfo)
         {
             var category = coursesDbContext.Categories.Find(CategoryInfo.Id);
 
