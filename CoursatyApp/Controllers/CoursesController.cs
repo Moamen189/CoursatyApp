@@ -19,7 +19,7 @@ namespace CoursatyApp.Controllers
             this.coursesDbContext = coursesDbContext;
         }
         [HttpGet]
-        public ActionResult GetCourses(string category , string SearchQuery)
+        public ActionResult GetCourses([FromQuery] string category , [FromQuery]  string SearchQuery)
         {
             if(string.IsNullOrEmpty(category) && string.IsNullOrEmpty(SearchQuery)) { 
 
