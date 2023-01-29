@@ -1,4 +1,6 @@
 using CoursatyApp.Data;
+using CoursatyApp.Data.Repositories;
+using CoursatyApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +37,10 @@ namespace CoursatyApp
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddTransient<ICourseService , CourseServices>();
+            services.AddTransient<CourseRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
